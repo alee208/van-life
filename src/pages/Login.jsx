@@ -7,16 +7,22 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [error, setError] = React.useState(null);
   const [status, setStatus] = React.useState("idle");
+  const [error, setError] = React.useState(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from || "/host";
 
   function handleSubmit(e) {
     e.preventDefault();
-    setStatus("loading");
+    setStatus("submitting");
     loginUser(loginFormData)
-      .then((data) => console.log(data))
+      .then((data) => {
+        setError(null);
+        localStorage.setItem("loggedin", true);
+        navigate(from, { replace: true });
+      })
       .catch((err) => {
         setError(err);
       })
@@ -40,6 +46,7 @@ export default function Login() {
       )}
       <h1>Sign in to your account</h1>
       {error?.message && <h3 className="login-error">{error.message}</h3>}
+
       <form onSubmit={handleSubmit} className="login-form">
         <input
           name="email"
@@ -55,8 +62,8 @@ export default function Login() {
           placeholder="Password"
           value={loginFormData.password}
         />
-        <button disabled={status === "loading"} onClick={handleSubmit}>
-          {status === "loading" ? "Logging in..." : "Log in"}
+        <button disabled={status === "submitting"}>
+          {status === "submitting" ? "Logging in..." : "Log in"}
         </button>
       </form>
     </div>
