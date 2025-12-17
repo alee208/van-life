@@ -67,6 +67,14 @@ header .login-link {
   align-items: center;
 }
 
+header .logout {
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  padding: 10px 10px;
+  margin-right: 20px;
+}
+
 nav {
   display: flex;
 }
@@ -544,6 +552,18 @@ i[class*="van-type-"] {
 
 .login-error {
   color: red;
+}
+
+.logout-btn {
+  background-color: #ff8c38;
+  border: none;
+  border-radius: 6px;
+  height: 55px;
+  min-width: 200px;
+  margin-top: 22px;
+  color: white;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
 }
 
 .host-dashboard-earnings {

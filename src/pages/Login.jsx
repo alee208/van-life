@@ -9,6 +9,9 @@ export default function Login() {
   });
   const [status, setStatus] = React.useState("idle");
   const [error, setError] = React.useState(null);
+  const [isLoggedin, setIsloggedin] = React.useState(
+    localStorage.getItem("loggedin") === "true"
+  );
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,7 +23,8 @@ export default function Login() {
     loginUser(loginFormData)
       .then((data) => {
         setError(null);
-        localStorage.setItem("loggedin", true);
+        setIsloggedin(true);
+        localStorage.setItem("loggedin", "true");
         navigate(from, { replace: true });
       })
       .catch((err) => {
@@ -29,6 +33,11 @@ export default function Login() {
       .finally(() => {
         setStatus("idle");
       });
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedin");
+    setIsloggedin(false);
   }
 
   function handleChange(e) {
@@ -41,31 +50,42 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      {location.state?.message && (
-        <h3 className="login-error">{location.state.message}</h3>
-      )}
-      <h1>Sign in to your account</h1>
-      {error?.message && <h3 className="login-error">{error.message}</h3>}
+      {isLoggedin ? (
+        <>
+          <h1>You are currently logged in</h1>
+          <button className="logout-btn" onClick={logout}>
+            Log out
+          </button>
+        </>
+      ) : (
+        <>
+          {location.state?.message && (
+            <h3 className="login-error">{location.state.message}</h3>
+          )}
+          <h1>Sign in to your account</h1>
+          {error?.message && <h3 className="login-error">{error.message}</h3>}
 
-      <form onSubmit={handleSubmit} className="login-form">
-        <input
-          name="email"
-          onChange={handleChange}
-          type="email"
-          placeholder="Email address"
-          value={loginFormData.email}
-        />
-        <input
-          name="password"
-          onChange={handleChange}
-          type="password"
-          placeholder="Password"
-          value={loginFormData.password}
-        />
-        <button disabled={status === "submitting"}>
-          {status === "submitting" ? "Logging in..." : "Log in"}
-        </button>
-      </form>
+          <form onSubmit={handleSubmit} className="login-form">
+            <input
+              name="email"
+              onChange={handleChange}
+              type="email"
+              placeholder="Email address"
+              value={loginFormData.email}
+            />
+            <input
+              name="password"
+              onChange={handleChange}
+              type="password"
+              placeholder="Password"
+              value={loginFormData.password}
+            />
+            <button disabled={status === "submitting"}>
+              {status === "submitting" ? "Logging in..." : "Log in"}
+            </button>
+          </form>
+        </>
+      )}
     </div>
   );
 }
