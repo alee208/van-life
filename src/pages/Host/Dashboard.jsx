@@ -15,6 +15,8 @@ export default function Dashboard() {
       .finally(() => setLoading(false));
   }, []);
 
+  const userName = localStorage.getItem("username");
+
   function renderVanElements(vans) {
     const hostVansEls = vans.map((van) => (
       <div className="host-van-single" key={van.id}>
@@ -46,7 +48,7 @@ export default function Dashboard() {
     <>
       <section className="host-dashboard-earnings">
         <div className="info">
-          <h1>Welcome!</h1>
+          <h1>Welcome {userName}!</h1>
           <p>
             Income last <span>30 days</span>
           </p>

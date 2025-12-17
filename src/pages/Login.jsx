@@ -25,6 +25,7 @@ export default function Login() {
         setError(null);
         setIsloggedin(true);
         localStorage.setItem("loggedin", "true");
+        localStorage.setItem("username", data.user.name);
         navigate(from, { replace: true });
       })
       .catch((err) => {
@@ -37,6 +38,7 @@ export default function Login() {
 
   function logout() {
     localStorage.removeItem("loggedin");
+    localStorage.removeItem("username");
     setIsloggedin(false);
   }
 
